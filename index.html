@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12355b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Akses Voli">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Akses Masuk Turnamen Voli SMAN 9 Kota Jambi</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<style>
+:root{--navy:#12355b;--navy2:#0c2640;--gold:#f5c518;--bg:#eef2f7;--tx:#14213d;--mut:#64748b;--ok:#15803d;--bad:#c62828;--bd:#d9e1ec}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+button,input{font:inherit}
+.hide{display:none!important}
+header{background:var(--navy);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+.ball{width:38px;height:38px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-size:22px;flex:none}
+header h1{font-size:15px;line-height:1.2}
+header small{opacity:.75;font-size:12px}
+header .sp{flex:1}
+.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:700;cursor:pointer;background:var(--navy);color:#fff}
+.btn.gold{background:var(--gold);color:var(--navy2)}
+.btn.line{background:#fff;color:var(--navy);border:1.5px solid var(--bd)}
+.btn.sm{padding:8px 12px;font-size:13px;border-radius:9px}
+.btn.red{background:#fff;color:var(--bad);border:1.5px solid #f2c4c4}
+.btn.full{width:100%}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.45}
+header .btn{background:rgba(255,255,255,.14);padding:8px 12px;font-size:13px}
+main{max-width:560px;margin:0 auto;padding:16px}
+.panel{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:18px;margin-bottom:14px}
+h2{font-size:18px;margin-bottom:4px}
+.mut{color:var(--mut);font-size:13px}
+label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
+input{width:100%;border:1.5px solid var(--bd);border-radius:12px;padding:13px 14px;font-size:16px;background:#fff;color:var(--tx)}
+input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--navy)}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(160deg,var(--navy2),var(--navy))}
+.login .box{background:#fff;border-radius:20px;padding:28px 22px;width:100%;max-width:380px;text-align:center}
+.login .ball{width:64px;height:64px;font-size:36px;margin:0 auto 14px}
+.login h1{font-size:20px}
+.login input{text-align:center;font-size:24px;letter-spacing:.4em;margin:20px 0 14px;-webkit-text-security:disc;text-security:disc;-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none}
+.login input::placeholder{letter-spacing:0;font-size:16px}
+.tabs{display:flex;gap:6px;background:#dde5f0;padding:5px;border-radius:14px;margin-bottom:14px}
+.tabs button{flex:1;border:0;background:none;padding:11px;border-radius:10px;font-weight:700;color:var(--mut)}
+.tabs button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px #0002}
+.row{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--bd)}
+.row:first-child{border-top:0}
+.row .i{flex:1;min-width:0}
+.row b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row small{color:var(--mut);font-size:12px}
+.row .b{display:flex;gap:6px}
+#reader{border-radius:14px;overflow:hidden;background:#0c2640;min-height:260px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stat{background:var(--bg);border-radius:12px;padding:12px 6px;text-align:center}
+.stat b{display:block;font-size:28px;line-height:1.1}
+.stat span{font-size:12px;color:var(--mut)}
+.stat.s b{color:var(--ok)}
+.stat.s.zero b{color:var(--bad)}
+.step{display:flex;align-items:center;justify-content:center;gap:18px;margin:14px 0}
+.step button{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--bd);background:#fff;font-size:26px;font-weight:700;color:var(--navy)}
+.step output{font-size:40px;font-weight:800;min-width:64px;text-align:center}
+.tname{font-size:22px;font-weight:800}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;background:#dcfce7;color:var(--ok)}
+.badge.x{background:#fde4e4;color:var(--bad)}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--navy2);color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;z-index:30;max-width:90%;text-align:center;box-shadow:0 6px 20px #0004}
+#toast.bad{background:var(--bad)}
+#toast.ok{background:var(--ok)}
+#busy{position:fixed;inset:0;background:#fff8;display:grid;place-items:center;z-index:25}
+#busy i{width:38px;height:38px;border:4px solid var(--bd);border-top-color:var(--navy);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+#modal{position:fixed;inset:0;background:#0c2640ee;z-index:20;overflow:auto;padding:16px}
+.mbar{display:flex;gap:8px;max-width:420px;margin:0 auto 14px}
+.mbar .btn{flex:1}
+#cards{display:grid;gap:14px;justify-content:center}
+.idcard{width:90mm;height:58mm;background:#fff;border-radius:3mm;overflow:hidden;display:flex;flex-direction:column;border:.3mm solid #b8c4d6;color:#14213d;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ch{background:var(--navy);color:#fff;display:flex;align-items:center;gap:2.5mm;padding:2mm 3mm;border-bottom:1.2mm solid var(--gold)}
+.ch .lg{width:8mm;height:8mm;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-size:5mm}
+.ch b{display:block;font-size:3.6mm;line-height:1.1}
+.ch span{font-size:2.6mm;opacity:.85}
+.cb{flex:1;display:flex;align-items:center;gap:3mm;padding:2.5mm 3mm}
+.cb img{width:30mm;height:30mm;flex:none;image-rendering:pixelated}
+.ci{min-width:0;flex:1}
+.ci small{font-size:2.3mm;color:#64748b}
+.ci h3{font-size:4.6mm;line-height:1.15;margin:.5mm 0 2mm;word-break:break-word}
+.ci .q{font-size:7mm;font-weight:800;color:var(--navy);line-height:1}
+.ci .q span{font-size:2.5mm;font-weight:600;color:#64748b;display:block;margin-top:.8mm}
+.ci code{font-size:2.8mm;color:#64748b;display:block;margin-top:1.5mm}
+.cf{background:#f1f5fb;font-size:2.3mm;text-align:center;padding:1.2mm;color:#475569}
+@media print{
+  @page{size:A4;margin:10mm}
+  body{background:#fff}
+  body>*:not(#modal){display:none!important}
+  #modal{position:static;background:none;padding:0;overflow:visible}
+  .mbar{display:none}
+  #cards{grid-template-columns:repeat(2,90mm);gap:5mm;justify-content:start}
+  .idcard{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section class="login" id="vLogin">
+  <div class="box">
+    <div class="ball">🏐</div>
+    <h1>Akses Masuk Turnamen Voli</h1>
+    <p class="mut">SMAN 9 Kota Jambi</p>
+    <input id="code" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ketik kode akses" aria-label="Kode akses">
+    <button class="btn gold full" id="bLogin">Masuk</button>
+  </div>
+</section>
+
+<!-- APLIKASI -->
+<div id="vApp" class="hide">
+  <header>
+    <div class="ball">🏐</div>
+    <div><h1>Turnamen Voli SMAN 9</h1><small id="who"></small></div>
+    <div class="sp"></div>
+    <button class="btn" id="bOut">Keluar</button>
+  </header>
+  <main>
+
+    <!-- ADMIN -->
+    <div id="vAdmin" class="hide">
+      <div class="tabs">
+        <button data-t="add" class="on">Tambah tim</button>
+        <button data-t="list">Daftar tim</button>
+      </div>
+      <div id="tAdd" class="panel">
+        <h2>Tambah tim</h2>
+        <p class="mut">Setelah disimpan, kartu ID siap cetak langsung muncul.</p>
+        <label for="nama">Nama tim</label>
+        <input id="nama" placeholder="Contoh: SMAN 1 Jambi" autocomplete="off">
+        <label for="kuota">Jumlah akses masuk per hari</label>
+        <input id="kuota" type="number" inputmode="numeric" min="1" placeholder="Contoh: 15">
+        <button class="btn gold full" id="bAdd" style="margin-top:18px">Simpan dan buat kartu</button>
+      </div>
+      <div id="tList" class="panel hide">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="flex:1"><h2>Daftar tim</h2><p class="mut" id="tgl"></p></div>
+          <button class="btn sm" id="bAll">Cetak semua</button>
+        </div>
+        <div id="list" style="margin-top:8px"></div>
+      </div>
+    </div>
+
+    <!-- PANITIA -->
+    <div id="vPanitia" class="hide">
+      <div class="tabs">
+        <button data-p="scan" class="on">Scan QR</button>
+        <button data-p="man">Input manual</button>
+      </div>
+      <div id="pScan" class="panel">
+        <div id="reader"></div>
+        <p class="mut" id="scanMsg" style="margin-top:10px;text-align:center">Arahkan kamera ke QR code pada kartu tim.</p>
+      </div>
+      <div id="pMan" class="panel hide">
+        <h2>Input manual</h2>
+        <p class="mut">Gunakan jika QR tidak bisa dipindai.</p>
+        <label for="kode">Kode manual</label>
+        <input id="kode" placeholder="Contoh: V9sma9putri" autocapitalize="none" autocomplete="off" spellcheck="false">
+        <p class="mut" style="margin-top:8px">Format: V9 diikuti nama tim, tanpa spasi.</p>
+        <button class="btn gold full" id="bFind" style="margin-top:18px">Cek akses</button>
+      </div>
+      <div id="res" class="panel hide"></div>
+    </div>
+  </main>
+</div>
+
+<!-- PRATINJAU KARTU -->
+<div id="modal" class="hide">
+  <div class="mbar">
+    <button class="btn gold" id="bPrint">Cetak</button>
+    <button class="btn line" id="bClose">Tutup</button>
+  </div>
+  <div id="cards"></div>
+</div>
+
+<div id="busy" class="hide"><i></i></div>
+<div id="toast" class="hide" role="status"></div>
+
+<script>
+// ====== PENGATURAN: tempel URL Web App Google Apps Script di bawah ini ======
+const API_URL = 'GANTI_DENGAN_URL_WEB_APP_ANDA';
+// ============================================================================
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S = null, teams = [], cur = null, n = 1, scanner = null, tmr;
+try { S = JSON.parse(localStorage.getItem('sess') || 'null'); } catch (e) {}
+
+function toast(m, t) {
+  const el = $('toast'); el.textContent = m; el.className = t || ''; clearTimeout(tmr);
+  tmr = setTimeout(() => el.classList.add('hide'), 2800);
+}
+const busy = on => $('busy').classList.toggle('hide', !on);
+
+/* ---------- MODE DEMO (otomatis aktif jika API_URL belum diisi) ---------- */
+const DEMO = API_URL.startsWith('GANTI');
+const CODES = { '1318': ['admin', 'Admin'], '2001': ['panitia', 'Panitia 1'], '2002': ['panitia', 'Panitia 2'] };
+let mem = null;
+const view = t => ({ ...t, sisa: t.kuota - t.terpakai });
+const norm = s => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+function dbLoad() {
+  try { mem = JSON.parse(localStorage.getItem('demoDB') || 'null') || mem; } catch (e) {}
+  if (!mem) mem = { teams: [], day: '' };
+  const today = new Date().toLocaleDateString('sv-SE');
+  if (mem.day !== today) { mem.teams.forEach(t => t.terpakai = 0); mem.day = today; }
+}
+function dbSave() { try { localStorage.setItem('demoDB', JSON.stringify(mem)); } catch (e) {} }
+async function demoApi(a, p) {
+  const u = CODES[String(p.code || '').trim()];
+  if (!u) throw new Error('Kode akses salah');
+  if (a === 'login') return { ok: true, role: u[0], name: u[1] };
+  dbLoad();
+  const adm = () => { if (u[0] !== 'admin') throw new Error('Khusus admin'); };
+  if (a === 'list') { adm(); return { ok: true, today: mem.day, teams: mem.teams.map(view) }; }
+  if (a === 'add') {
+    adm();
+    const nama = String(p.nama || '').trim(), kuota = parseInt(p.kuota, 10);
+    if (!nama) throw new Error('Nama tim wajib diisi');
+    if (!(kuota > 0)) throw new Error('Jumlah akses harus lebih dari 0');
+    if (mem.teams.some(t => norm(t.nama) === norm(nama))) throw new Error('Nama tim sudah terdaftar');
+    const max = mem.teams.reduce((m, t) => Math.max(m, parseInt(t.id.replace(/\D/g, ''), 10) || 0), 0);
+    const t = { id: 'V9-' + String(max + 1).padStart(3, '0'), nama, kuota, terpakai: 0 };
+    mem.teams.push(t); dbSave(); return { ok: true, team: view(t) };
+  }
+  if (a === 'del') { adm(); mem.teams = mem.teams.filter(t => t.id !== p.id); dbSave(); return { ok: true }; }
+  if (a === 'find') {
+    let t;
+    if (p.qr) t = mem.teams.find(x => x.id.toUpperCase() === String(p.qr).trim().toUpperCase());
+    else {
+      const m = String(p.manual || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+      if (!m.startsWith('v9')) throw new Error('Kode harus diawali V9');
+      const nm = m.slice(2);
+      t = nm && mem.teams.find(x => String(x.nama).replace(/[^a-z0-9]/gi, '').toLowerCase() === nm);
+    }
+    if (!t) throw new Error(p.qr ? 'QR tidak dikenali' : 'Nama tim tidak ditemukan');
+    return { ok: true, team: view(t) };
+  }
+  if (a === 'enter') {
+    const t = mem.teams.find(x => x.id === p.id), k = parseInt(p.n, 10);
+    if (!t) throw new Error('Tim tidak ditemukan');
+    if (!(k > 0)) throw new Error('Jumlah masuk tidak valid');
+    if (k > t.kuota - t.terpakai) throw new Error('Melebihi sisa akses (' + (t.kuota - t.terpakai) + ')');
+    t.terpakai += k; dbSave(); return { ok: true, team: view(t) };
+  }
+  throw new Error('Aksi tidak dikenal');
+}
+
+async function api(action, data = {}) {
+  if (DEMO) return demoApi(action, { code: S ? S.code : '', ...data });
+  const r = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action, code: S ? S.code : '', ...data }) });
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error);
+  return j;
+}
+async function run(fn) {
+  try { busy(1); return await fn(); }
+  catch (e) { toast(e.message === 'Failed to fetch' ? 'Tidak ada koneksi / URL API belum benar' : e.message, 'bad'); }
+  finally { busy(0); }
+}
+
+/* ---------- Login ---------- */
+async function login() {
+  const code = $('code').value.trim();
+  if (!code) return;
+  await run(async () => {
+    const j = await api('login', { code });
+    S = { code, role: j.role, name: j.name };
+    localStorage.setItem('sess', JSON.stringify(S));
+    $('code').value = '';
+    start();
+  });
+}
+function start() {
+  $('vLogin').classList.add('hide'); $('vApp').classList.remove('hide');
+  $('who').textContent = S.name + (DEMO ? ' (mode demo)' : '');
+  const admin = S.role === 'admin';
+  $('vAdmin').classList.toggle('hide', !admin);
+  $('vPanitia').classList.toggle('hide', admin);
+  if (admin) loadTeams(); else startScan();
+}
+async function logout() {
+  await stopScan(); S = null; localStorage.removeItem('sess');
+  $('vApp').classList.add('hide'); $('vLogin').classList.remove('hide');
+}
+
+/* ---------- Admin ---------- */
+document.querySelectorAll('[data-t]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('[data-t]').forEach(x => x.classList.toggle('on', x === b));
+  $('tAdd').classList.toggle('hide', b.dataset.t !== 'add');
+  $('tList').classList.toggle('hide', b.dataset.t !== 'list');
+  if (b.dataset.t === 'list') loadTeams();
+});
+async function loadTeams() {
+  await run(async () => {
+    const j = await api('list'); teams = j.teams; $('tgl').textContent = 'Hitungan masuk hari ini: ' + j.today;
+    $('list').innerHTML = teams.length ? teams.map(t => `
+      <div class="row"><div class="i"><b>${esc(t.nama)}</b><small>${t.id} &nbsp;|&nbsp; Akses ${t.kuota} &nbsp;|&nbsp; Masuk ${t.terpakai} &nbsp;|&nbsp; Sisa ${t.sisa}</small></div>
+      <div class="b"><button class="btn sm" data-k="${t.id}">Kartu</button><button class="btn sm red" data-d="${t.id}">Hapus</button></div></div>`).join('')
+      : '<p class="mut" style="padding:14px 0">Belum ada tim. Tambahkan tim di tab Tambah tim.</p>';
+  });
+}
+$('list').onclick = async e => {
+  const k = e.target.dataset.k, d = e.target.dataset.d;
+  if (k) showCards([teams.find(t => t.id === k)]);
+  if (d && confirm('Hapus tim ini?')) { await run(() => api('del', { id: d })); loadTeams(); }
+};
+async function addTeam() {
+  const nama = $('nama').value.trim(), kuota = $('kuota').value;
+  await run(async () => {
+    const j = await api('add', { nama, kuota });
+    $('nama').value = ''; $('kuota').value = '';
+    toast('Tim disimpan', 'ok'); showCards([j.team]);
+  });
+}
+function cardHTML(t) {
+  const q = qrcode(0, 'M'); q.addData(t.id); q.make();
+  return `<div class="idcard"><div class="ch"><div class="lg">🏐</div><div><b>SMAN 9 KOTA JAMBI</b><span>Turnamen Bola Voli</span></div></div>
+  <div class="cb"><img alt="QR ${t.id}" src="${q.createDataURL(6, 0)}"><div class="ci"><small>Nama tim</small><h3>${esc(t.nama)}</h3>
+  <div class="q">${t.kuota}<span>akses masuk per hari</span></div><code>${t.id}</code></div></div>
+  <div class="cf">Tunjukkan QR ini kepada panitia di pintu masuk</div></div>`;
+}
+function showCards(list) { $('cards').innerHTML = list.map(cardHTML).join(''); $('modal').classList.remove('hide'); }
+
+/* ---------- Panitia ---------- */
+document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('[data-p]').forEach(x => x.classList.toggle('on', x === b));
+  const scan = b.dataset.p === 'scan';
+  $('pScan').classList.toggle('hide', !scan); $('pMan').classList.toggle('hide', scan);
+  $('res').classList.add('hide');
+  scan ? startScan() : stopScan();
+});
+async function startScan() {
+  await stopScan();
+  $('res').classList.add('hide'); $('scanMsg').textContent = 'Arahkan kamera ke QR code pada kartu tim.';
+  try {
+    scanner = new Html5Qrcode('reader');
+    await scanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 230, height: 230 } }, onScan, () => {});
+  } catch (e) {
+    scanner = null;
+    $('scanMsg').textContent = 'Kamera tidak bisa dibuka. Izinkan akses kamera, atau gunakan Input manual.';
+  }
+}
+async function stopScan() {
+  if (scanner) { try { await scanner.stop(); scanner.clear(); } catch (e) {} scanner = null; }
+}
+async function onScan(text) {
+  await stopScan();
+  if (navigator.vibrate) navigator.vibrate(80);
+  lookup({ qr: text });
+}
+async function lookup(p) {
+  await run(async () => { const j = await api('find', p); showRes(j.team); });
+  if (!cur && !$('pScan').classList.contains('hide')) startScan();
+}
+function showRes(t) {
+  cur = t; n = t.sisa > 0 ? 1 : 0; renderRes();
+}
+function renderRes() {
+  const t = cur, el = $('res');
+  el.classList.remove('hide');
+  el.innerHTML = `<span class="badge ${t.sisa > 0 ? '' : 'x'}">${t.sisa > 0 ? 'Akses tersedia' : 'Akses habis'}</span>
+  <div class="tname" style="margin-top:8px">${esc(t.nama)}</div><div class="mut">${t.id}</div>
+  <div class="stats"><div class="stat"><b>${t.kuota}</b><span>Jumlah akses</span></div><div class="stat"><b>${t.terpakai}</b><span>Sudah masuk</span></div>
+  <div class="stat s ${t.sisa > 0 ? '' : 'zero'}"><b>${t.sisa}</b><span>Sisa</span></div></div>
+  ${t.sisa > 0 ? `<div class="mut" style="text-align:center">Jumlah orang masuk sekarang</div>
+  <div class="step"><button id="mn" aria-label="Kurangi">−</button><output>${n}</output><button id="pl" aria-label="Tambah">+</button></div>
+  <button class="btn gold full" id="bGo">Izinkan masuk ${n} orang</button>` : ''}
+  <button class="btn line full" id="bNext" style="margin-top:10px">Selesai / pindai berikutnya</button>`;
+  if (t.sisa > 0) {
+    $('mn').onclick = () => { n = Math.max(1, n - 1); renderRes(); };
+    $('pl').onclick = () => { n = Math.min(t.sisa, n + 1); renderRes(); };
+    $('bGo').onclick = () => run(async () => {
+      const j = await api('enter', { id: t.id, n });
+      toast(n + ' orang diizinkan masuk', 'ok'); cur = j.team; n = cur.sisa > 0 ? 1 : 0; renderRes();
+    });
+  }
+  $('bNext').onclick = () => {
+    cur = null; $('res').classList.add('hide'); $('kode').value = '';
+    if (!$('pScan').classList.contains('hide')) startScan();
+  };
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ---------- Event ---------- */
+$('bLogin').onclick = login;
+$('code').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+$('bOut').onclick = logout;
+$('bAdd').onclick = addTeam;
+$('bAll').onclick = () => teams.length ? showCards(teams) : toast('Belum ada tim', 'bad');
+$('bPrint').onclick = () => window.print();
+$('bClose').onclick = () => $('modal').classList.add('hide');
+$('bFind').onclick = () => lookup({ manual: $('kode').value });
+
+/* Ikon & manifest agar bisa dipasang di layar utama HP */
+(function () { try {
+  const mk = z => { const c = document.createElement('canvas'); c.width = c.height = z; const x = c.getContext('2d');
+    x.fillStyle = '#12355b'; x.fillRect(0, 0, z, z); x.fillStyle = '#f5c518'; x.beginPath(); x.arc(z / 2, z / 2, z * .36, 0, 7); x.fill();
+    x.font = (z * .45) + 'px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('🏐', z / 2, z / 2 + z * .02); return c.toDataURL('image/png'); };
+  const a = document.createElement('link'); a.rel = 'apple-touch-icon'; a.href = mk(180); document.head.appendChild(a);
+  const m = { name: 'Akses Masuk Voli SMAN 9', short_name: 'Akses Voli', start_url: location.href.split('#')[0], display: 'standalone',
+    background_color: '#12355b', theme_color: '#12355b',
+    icons: [{ src: mk(192), sizes: '192x192', type: 'image/png' }, { src: mk(512), sizes: '512x512', type: 'image/png' }] };
+  const l = document.createElement('link'); l.rel = 'manifest';
+  l.href = URL.createObjectURL(new Blob([JSON.stringify(m)], { type: 'application/manifest+json' })); document.head.appendChild(l);
+} catch (e) {} })();
+if (DEMO) $('vLogin').querySelector('.box').insertAdjacentHTML('beforeend','<p class="mut" style="margin-top:16px">Mode demo: admin 1318, panitia 2001 atau 2002.<br>Data hanya tersimpan di perangkat ini.</p>');
+if (S) start();
+</script>
+</body>
+</html>
