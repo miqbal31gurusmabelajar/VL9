@@ -274,7 +274,7 @@ const busy = on => $('busy').classList.toggle('hide', !on);
 
 /* ---------- MODE DEMO (otomatis aktif jika API_URL belum diisi) ---------- */
 const DEMO = API_URL.startsWith('GANTI');
-const CODES = { '1318': ['admin', 'Admin'], '2001': ['panitia', 'Panitia 1'], '2002': ['panitia', 'Panitia 2'] };
+const CODES = { '****': ['admin', 'Admin'], '****': ['panitia', 'Panitia 1'], '****': ['panitia', 'Panitia 2'] };
 let mem = null;
 const view = t => ({ ...t, sisa: t.kuota - t.terpakai });
 const norm = s => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
