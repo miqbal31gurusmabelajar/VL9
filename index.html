@@ -38,6 +38,10 @@ h2{font-size:18px;margin-bottom:4px}
 label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
 input{width:100%;border:1.5px solid var(--bd);border-radius:12px;padding:13px 14px;font-size:16px;background:#fff;color:var(--tx)}
 input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--navy)}
+textarea{width:100%;border:1.5px solid var(--bd);border-radius:12px;padding:13px 14px;font:inherit;font-size:16px;resize:vertical;color:var(--tx)}
+textarea:focus{outline:3px solid #f5c51888;border-color:var(--navy)}
+.ov{position:fixed;inset:0;background:#0c2640cc;z-index:22;display:grid;place-items:center;padding:16px}
+.box2{width:100%;max-width:400px;margin:0}
 .login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(160deg,var(--navy2),var(--navy))}
 .login .box{background:#fff;border-radius:20px;padding:28px 22px;width:100%;max-width:380px;text-align:center}
 .login .ball{width:64px;height:64px;font-size:36px;margin:0 auto 14px}
@@ -47,9 +51,9 @@ input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--na
 .tabs{display:flex;gap:6px;background:#dde5f0;padding:5px;border-radius:14px;margin-bottom:14px}
 .tabs button{flex:1;border:0;background:none;padding:11px;border-radius:10px;font-weight:700;color:var(--mut)}
 .tabs button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px #0002}
-.row{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--bd)}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--bd)}
 .row:first-child{border-top:0}
-.row .i{flex:1;min-width:0}
+.row .i{flex:1 1 150px;min-width:0}
 .row b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row small{color:var(--mut);font-size:12px}
 .row .b{display:flex;gap:6px}
@@ -75,7 +79,8 @@ input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--na
 #modal{position:fixed;inset:0;background:#0c2640ee;z-index:20;overflow:auto;padding:16px}
 .mbar{display:flex;gap:8px;max-width:420px;margin:0 auto 14px}
 .mbar .btn{flex:1}
-#cards{display:grid;gap:14px;justify-content:center}
+.sheet{display:grid;gap:14px;justify-content:center;margin-bottom:18px}
+#mInfo{color:#fff;text-align:center;font-size:13px;line-height:1.5;margin:-4px auto 14px;max-width:420px;opacity:.9}
 .idcard{width:90mm;height:58mm;background:#fff;border-radius:3mm;overflow:hidden;display:flex;flex-direction:column;border:.3mm solid #b8c4d6;color:#14213d;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .ch{background:var(--navy);color:#fff;display:flex;align-items:center;gap:2.5mm;padding:2mm 3mm;border-bottom:1.2mm solid var(--gold)}
 .ch .lg{width:8mm;height:8mm;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-size:5mm}
@@ -95,9 +100,10 @@ input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--na
   body{background:#fff}
   body>*:not(#modal){display:none!important}
   #modal{position:static;background:none;padding:0;overflow:visible}
-  .mbar{display:none}
-  #cards{grid-template-columns:repeat(2,90mm);gap:5mm;justify-content:start}
-  .idcard{break-inside:avoid}
+  .mbar,#mInfo{display:none}
+  .sheet{display:grid;grid-template-columns:repeat(2,90mm);grid-auto-rows:58mm;gap:8mm 6mm;justify-content:center;align-content:start;margin:0;break-after:page;page-break-after:always}
+  .sheet:last-child{break-after:auto;page-break-after:auto}
+  .idcard{break-inside:avoid;border:.25mm dashed #8a96a8}
 }
 </style>
 </head>
@@ -127,8 +133,9 @@ input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--na
     <!-- ADMIN -->
     <div id="vAdmin" class="hide">
       <div class="tabs">
-        <button data-t="add" class="on">Tambah tim</button>
-        <button data-t="list">Daftar tim</button>
+        <button data-t="add" class="on">Tambah</button>
+        <button data-t="bulk">Banyak</button>
+        <button data-t="list">Daftar</button>
       </div>
       <div id="tAdd" class="panel">
         <h2>Tambah tim</h2>
@@ -136,8 +143,65 @@ input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--na
         <label for="nama">Nama tim</label>
         <input id="nama" placeholder="Contoh: SMAN 1 Jambi" autocomplete="off">
         <label for="kuota">Jumlah akses masuk per hari</label>
-        <input id="kuota" type="number" inputmode="numeric" min="1" placeholder="Contoh: 15">
+        <input id="kuota" type="number" inputmode="numeric" min="1" value="7" placeholder="Contoh: 7">
         <button class="btn gold full" id="bAdd" style="margin-top:18px">Simpan dan buat kartu</button>
+      </div>
+      <div id="tBulk" class="panel hide">
+        <h2>Tambah banyak tim</h2>
+        <p class="mut">49 nama tim sudah terisi di bawah. Periksa, lalu tekan Simpan. Nama yang sudah terdaftar dilewati.</p>
+        <label for="bnames">Daftar nama tim</label>
+        <textarea id="bnames" rows="10" placeholder="Satu nama tim per baris">MA AS'AD PUTRA
+MA PKP AL-HIDAYAH PUTRA
+MA PKP AL-HIDAYAH PUTRI
+MAN 1 SUNGAI GELAM PUTRI
+MAN 1 SUNGAI GELAM PUTRA
+MTS NURUl IKSAN PUTRI
+MTS PKP AL-HIDAYAH PUTRI
+MTSN 8 BTG.HARI PUTRI
+SEKOLAH RAKYAT PUTRA
+SMAN 1 MUJA PUTRA
+SMAN 10 MUJA PUTRA
+SMAN 10 MUJA PUTRI
+SMAN 12 KOJA PUTRI
+SMAN 13 KOJA PUTRA
+SMAN 13 KOJA PUTRI
+SMAN 17 MUJA PUTRA
+SMAN 2 KOJA PUTRA
+SMAN 2 MUJA PUTRA
+SMAN 2 MUJA PUTRI
+SMAN 3 KOJA PUTRA
+SMAN 3 MUJA PUTRA
+SMAN 3 MUJA PUTRI
+SMAN 5 TANJABTIM PUTRA
+SMAN 5 TANJABTIM PUTRI
+SMAN 6 KOJA PUTRA
+SMAN 6 KOJA PUTRI
+SMAN 6 MUJA PUTRA
+SMAN 6 MUJA PUTRI
+SMAN 7 KOJA PUTRA
+SMAN 8 BTG HARI PUTRA
+SMAN 8 KOJA PUTRA
+SMAN 8 KOJA PUTRI
+SMAN 9 KOJA PUTRA
+SMAN 9 KOJA PUTRI
+SMK PELITA RAYA PUTRA
+SMK PELITA RAYA PUTRI
+SMK PGRI 2 PUTRA
+SMK PGRI 2 PUTRI
+SMK YADIKA KOJA PUTRA
+SMK YKI PETALING PUTRA
+SMKN 10 MUJA PUTRA
+SMKN 10 MUJA PUTRI
+SMKN 6 KOJA PUTRA
+SMPN 2 MUJA PUTRI
+SMPN 23 MUJA PUTRI
+SMPN 32 MUJA PUTRI
+SMPN 6 KOJA PUTRI
+SMPN 8 MUJA PUTRI
+SMPN15 KOJA PUTRI</textarea>
+        <label for="bkuota">Jumlah akses masuk per hari (semua tim)</label>
+        <input id="bkuota" type="number" inputmode="numeric" min="1" value="7">
+        <button class="btn gold full" id="bBulk" style="margin-top:18px">Simpan semua dan buat kartu</button>
       </div>
       <div id="tList" class="panel hide">
         <div style="display:flex;align-items:center;gap:10px">
@@ -177,9 +241,18 @@ input:focus,.btn:focus-visible{outline:3px solid #f5c51888;border-color:var(--na
     <button class="btn gold" id="bPrint">Cetak</button>
     <button class="btn line" id="bClose">Tutup</button>
   </div>
+  <p id="mInfo"></p>
   <div id="cards"></div>
 </div>
 
+<div id="edModal" class="ov hide"><div class="panel box2">
+  <h2>Edit tim</h2>
+  <label for="eNama">Nama tim</label>
+  <input id="eNama" autocomplete="off">
+  <label for="eKuota">Jumlah akses masuk per hari</label>
+  <input id="eKuota" type="number" inputmode="numeric" min="1">
+  <div style="display:flex;gap:8px;margin-top:18px"><button class="btn gold" id="bSave" style="flex:1">Simpan</button><button class="btn line" id="bEdX" style="flex:1">Batal</button></div>
+</div></div>
 <div id="busy" class="hide"><i></i></div>
 <div id="toast" class="hide" role="status"></div>
 
@@ -228,6 +301,30 @@ async function demoApi(a, p) {
     const max = mem.teams.reduce((m, t) => Math.max(m, parseInt(t.id.replace(/\D/g, ''), 10) || 0), 0);
     const t = { id: 'V9-' + String(max + 1).padStart(3, '0'), nama, kuota, terpakai: 0 };
     mem.teams.push(t); dbSave(); return { ok: true, team: view(t) };
+  }
+  if (a === 'edit') {
+    adm();
+    const t = mem.teams.find(x => x.id === p.id), nama = String(p.nama || '').trim(), kuota = parseInt(p.kuota, 10);
+    if (!t) throw new Error('Tim tidak ditemukan');
+    if (!nama) throw new Error('Nama tim wajib diisi');
+    if (!(kuota > 0)) throw new Error('Jumlah akses harus lebih dari 0');
+    if (kuota < t.terpakai) throw new Error('Jumlah akses tidak boleh kurang dari yang sudah masuk (' + t.terpakai + ')');
+    if (mem.teams.some(x => x.id !== t.id && norm(x.nama) === norm(nama))) throw new Error('Nama tim sudah terdaftar');
+    t.nama = nama; t.kuota = kuota; dbSave(); return { ok: true, team: view(t) };
+  }
+  if (a === 'bulk') {
+    adm();
+    const kuota = parseInt(p.kuota, 10);
+    if (!(kuota > 0)) throw new Error('Jumlah akses harus lebih dari 0');
+    let max = mem.teams.reduce((m, t) => Math.max(m, parseInt(t.id.replace(/\D/g, ''), 10) || 0), 0);
+    const added = []; let skipped = 0;
+    (p.names || []).forEach(raw => {
+      const nama = String(raw).trim(); if (!nama) return;
+      if (mem.teams.some(x => norm(x.nama) === norm(nama))) { skipped++; return; }
+      max++; const t = { id: 'V9-' + String(max).padStart(3, '0'), nama, kuota, terpakai: 0 };
+      mem.teams.push(t); added.push(view(t));
+    });
+    dbSave(); return { ok: true, added, skipped };
   }
   if (a === 'del') { adm(); mem.teams = mem.teams.filter(t => t.id !== p.id); dbSave(); return { ok: true }; }
   if (a === 'find') {
@@ -294,6 +391,7 @@ async function logout() {
 document.querySelectorAll('[data-t]').forEach(b => b.onclick = () => {
   document.querySelectorAll('[data-t]').forEach(x => x.classList.toggle('on', x === b));
   $('tAdd').classList.toggle('hide', b.dataset.t !== 'add');
+  $('tBulk').classList.toggle('hide', b.dataset.t !== 'bulk');
   $('tList').classList.toggle('hide', b.dataset.t !== 'list');
   if (b.dataset.t === 'list') loadTeams();
 });
@@ -302,12 +400,13 @@ async function loadTeams() {
     const j = await api('list'); teams = j.teams; $('tgl').textContent = 'Hitungan masuk hari ini: ' + j.today;
     $('list').innerHTML = teams.length ? teams.map(t => `
       <div class="row"><div class="i"><b>${esc(t.nama)}</b><small>${t.id} &nbsp;|&nbsp; Akses ${t.kuota} &nbsp;|&nbsp; Masuk ${t.terpakai} &nbsp;|&nbsp; Sisa ${t.sisa}</small></div>
-      <div class="b"><button class="btn sm" data-k="${t.id}">Kartu</button><button class="btn sm red" data-d="${t.id}">Hapus</button></div></div>`).join('')
+      <div class="b"><button class="btn sm" data-k="${t.id}">Kartu</button><button class="btn sm line" data-e="${t.id}">Edit</button><button class="btn sm red" data-d="${t.id}">Hapus</button></div></div>`).join('')
       : '<p class="mut" style="padding:14px 0">Belum ada tim. Tambahkan tim di tab Tambah tim.</p>';
   });
 }
 $('list').onclick = async e => {
-  const k = e.target.dataset.k, d = e.target.dataset.d;
+  const k = e.target.dataset.k, d = e.target.dataset.d, ed = e.target.dataset.e;
+  if (ed) openEdit(ed);
   if (k) showCards([teams.find(t => t.id === k)]);
   if (d && confirm('Hapus tim ini?')) { await run(() => api('del', { id: d })); loadTeams(); }
 };
@@ -319,6 +418,25 @@ async function addTeam() {
     toast('Tim disimpan', 'ok'); showCards([j.team]);
   });
 }
+let editId = null;
+function openEdit(id) {
+  const t = teams.find(x => x.id === id); if (!t) return;
+  editId = id; $('eNama').value = t.nama; $('eKuota').value = t.kuota; $('edModal').classList.remove('hide');
+}
+async function saveEdit() {
+  const j = await run(() => api('edit', { id: editId, nama: $('eNama').value, kuota: $('eKuota').value }));
+  if (!j) return;
+  $('edModal').classList.add('hide'); toast('Perubahan disimpan', 'ok'); loadTeams();
+}
+async function addBulk() {
+  const names = $('bnames').value.split('\n').map(s => s.trim()).filter(Boolean);
+  if (!names.length) return toast('Isi nama tim dulu', 'bad');
+  const j = await run(() => api('bulk', { names, kuota: $('bkuota').value }));
+  if (!j) return;
+  $('bnames').value = '';
+  toast(j.added.length + ' tim disimpan' + (j.skipped ? ', ' + j.skipped + ' dilewati (sudah ada)' : ''), 'ok');
+  if (j.added.length) showCards(j.added);
+}
 function cardHTML(t) {
   const q = qrcode(0, 'M'); q.addData(t.id); q.make();
   return `<div class="idcard"><div class="ch"><div class="lg">🏐</div><div><b>SMAN 9 KOTA JAMBI</b><span>Turnamen Bola Voli</span></div></div>
@@ -326,7 +444,13 @@ function cardHTML(t) {
   <div class="q">${t.kuota}<span>akses masuk per hari</span></div><code>${t.id}</code></div></div>
   <div class="cf">Tunjukkan QR ini kepada panitia di pintu masuk</div></div>`;
 }
-function showCards(list) { $('cards').innerHTML = list.map(cardHTML).join(''); $('modal').classList.remove('hide'); }
+function showCards(list) {
+  const pages = [];
+  for (let i = 0; i < list.length; i += 8) pages.push(list.slice(i, i + 8));
+  $('cards').innerHTML = pages.map(p => '<div class="sheet">' + p.map(cardHTML).join('') + '</div>').join('');
+  $('mInfo').textContent = list.length + ' kartu · ' + pages.length + ' lembar A4 (8 kartu per lembar, 2×4). Saat mencetak pilih kertas A4, skala 100%, dan aktifkan grafik latar.';
+  $('modal').classList.remove('hide');
+}
 
 /* ---------- Panitia ---------- */
 document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
@@ -393,6 +517,9 @@ $('bLogin').onclick = login;
 $('code').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
 $('bOut').onclick = logout;
 $('bAdd').onclick = addTeam;
+$('bBulk').onclick = addBulk;
+$('bSave').onclick = saveEdit;
+$('bEdX').onclick = () => $('edModal').classList.add('hide');
 $('bAll').onclick = () => teams.length ? showCards(teams) : toast('Belum ada tim', 'bad');
 $('bPrint').onclick = () => window.print();
 $('bClose').onclick = () => $('modal').classList.add('hide');
